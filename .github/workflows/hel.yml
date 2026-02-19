@@ -1,0 +1,37 @@
+name: CI with Caching
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create dummy dependency
+        run: |
+          mkdir -p my_deps
+          echo "cached-data" > my_deps/data.txt
+
+      - name: Setup Cache
+        id: cache-step
+        uses: actions/cache@v4
+        with:
+          path: my_deps
+          key: cache-bea898f
+
+      - name: prime-cache-bea898f
+        run: |
+          echo "Cache Hit/Miss Result: ${{ steps.cache-step.outputs.cache-hit }}"
+          if [ "${{ steps.cache-step.outputs.cache-hit }}" == "true" ]; then
+            echo "Success: Cache was found!"
+          else
+            echo "Notice: Cache was not found, priming it now."
+          fi
+
+      - name: 23f3003492@ds.study.iitm.ac.in
+        run: echo "Finalizing workflow for 23f3003492@ds.study.iitm.ac.in"
